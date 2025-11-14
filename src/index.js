@@ -2,17 +2,17 @@
  * A CORS proxy Cloudflare Worker. Supports passing credentials (cookies, auth headers).
  *
  * Usage: https://<your-worker-url>/<target-url>
- * Include an X-API-KEY header with the correct API key to use the proxy.
+ * Include an X-PROXY-API-KEY header with the correct API key to use the proxy.
  */
 export default {
 	async fetch(request, env, ctx) {
 		const url = new URL(request.url);
 		const requestOrigin = request.headers.get('Origin');
-		const apiKey = request.headers.get('X-API-KEY');
+		const apiKey = request.headers.get('X-PROXY-API-KEY');
 
 		// Handle (invalid) requests with a simple explanation.
-		if (url.pathname === '/' || apiKey !== env.API_KEY) {
-			return new Response('Usage: /<target_url> (X-API-KEY header)', { status: 200 });
+		if (url.pathname === '/' || apiKey !== env.PROXY_API_KEY) {
+			return new Response('Usage: /<target_url> (X-PROXY-API-KEY header)', { status: 200 });
 		}
 
 		// Handle CORS preflight (OPTIONS) requests.
