@@ -10,11 +10,6 @@ export default {
 		const requestOrigin = request.headers.get('Origin');
 		const apiKey = request.headers.get('X-PROXY-API-KEY');
 
-		// Handle (invalid) requests with a simple explanation.
-		if (url.pathname === '/' || apiKey !== env.PROXY_API_KEY) {
-			return new Response('Usage: /<target_url> (X-PROXY-API-KEY header)', { status: 200 });
-		}
-
 		// Handle CORS preflight (OPTIONS) requests.
 		if (request.method === 'OPTIONS') {
 			return new Response(null, {
@@ -26,9 +21,14 @@ export default {
 					// Required for credentials.
 					'Access-Control-Allow-Credentials': 'true',
 					// Reflect back the request headers the browser asked for.
-					'Access-Control-Allow-Headers': request.headers.get('Access-Control-Request-Headers'),
+					'Access-Control-Allow-Headers': '*',
 				},
 			});
+		}
+
+		// Handle (invalid) requests with a simple explanation.
+		if (url.pathname === '/' || apiKey !== env.PROXY_API_KEY) {
+			return new Response('Usage: /<target_url> (X-PROXY-API-KEY header)', { status: 200 });
 		}
 
 		// Reconstruct the target URL from the path.
