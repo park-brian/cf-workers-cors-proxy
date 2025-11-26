@@ -14,13 +14,10 @@ export default {
 		if (request.method === 'OPTIONS') {
 			return new Response(null, {
 				headers: {
-					// Dynamically set the origin to the one that made the request.
 					'Access-Control-Allow-Origin': requestOrigin,
 					'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, DELETE, PATCH, OPTIONS',
 					'Access-Control-Max-Age': '86400',
-					// Required for credentials.
 					'Access-Control-Allow-Credentials': 'true',
-					// Reflect back the request headers the browser asked for.
 					'Access-Control-Allow-Headers': '*',
 				},
 			});
